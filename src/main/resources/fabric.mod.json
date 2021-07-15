@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "timber",
+  "version": "${version}",
+  "name": "Timber",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/timber/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "mycf.timber.client.TimberClient"
+    ],
+    "main": [
+      "mycf.timber.Timber"
+    ]
+  },
+  "mixins": [
+    "timber.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "java": ">=16",
+    "fabric": "*",
+    "minecraft": "1.17.1"
+  }
+}

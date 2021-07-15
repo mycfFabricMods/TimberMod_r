@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "mycf.timber.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "axemixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
