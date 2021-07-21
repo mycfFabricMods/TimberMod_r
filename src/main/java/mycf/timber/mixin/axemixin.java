@@ -31,8 +31,8 @@ public class axemixin extends MiningToolItem {
     }
     Integer mode = 1;
 
-    private static final HashSet<Block> BYGLogs = new HashSet<Block>();
-
+    //private static final HashSet<Block> BYGLogs = new HashSet<Block>();
+    //Registry.BLOCK.getId(Blocks.WHITE_WOOL).equals(new Identifier("minecraft:white_wool"));
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(!world.isClient()){
@@ -52,10 +52,8 @@ public class axemixin extends MiningToolItem {
     }
 
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        FabricLoader.getInstance().isModLoaded("byg");
-        FabricLoader.getInstance().getEntrypoints("some_mod_entrypoint",)
-
-
+        //FabricLoader.getInstance().isModLoaded("byg");
+        //FabricLoader.getInstance().getEntrypoints("some_mod_entrypoint",);
 
         if(mode == 2) {
             int i = 1;
@@ -92,7 +90,7 @@ public class axemixin extends MiningToolItem {
 
 
 
-    static {
+/*    static {
         BYGLogs = Sets.newHashSet((Object[])(BYGBlocks.ASPEN_LOG, BYGBlocks.BAOBAB_LOG, BYGBlocks.BLUE_ENCHANTED_LOG,
                 BYGBlocks.CHERRY_LOG, BYGBlocks.CIKA_LOG, BYGBlocks.CYPRESS_LOG, BYGBlocks.EBONY_LOG,
                 BYGBlocks.FIR_LOG, BYGBlocks.GREEN_ENCHANTED_LOG, BYGBlocks.HOLLY_LOG, BYGBlocks.JACARANDA_LOG,
@@ -102,4 +100,5 @@ public class axemixin extends MiningToolItem {
                 BYGBlocks.EMBUR_PEDU, BYGBlocks.PALM_LOG, BYGBlocks.LAMENT_LOG, BYGBlocks.WITHERING_OAK_LOG,
                 BYGBlocks.BULBIS_STEM, BYGBlocks.NIGHTSHADE_LOG, BYGBlocks.IMBUED_NIGHTSHADE_LOG, BYGBlocks.ETHER_LOG);
     }
+ */
 }
