@@ -1,17 +1,14 @@
 # How to request compatible mods
 
 Hello everyone.\
-Please create a new issue for **each** mod you want support for. Please keep in mind, that I do this in my free time and just because you 
-requested a mod there is no gurantee that I'll really add it.
+If you want my mod to support antoher mod please reach out to the developers of the mod.
 
-# Make those things sure before you request a mod
-1. Make sure the soruce code is publicy availabe
-2. Make sure its a **fabric** mod
-3. Make sure the mod is available in your preferred version.
+What they need to do:
+1. Create a tag with path:\
+`data/minecraft/tags/blocks`
+2. Depending on whether the logs burn or don't burn they should add their logs to either `logs_that_burn.json` or `logs.json`
 
-Regarding point 3.: Normally I will only add support for the newest versions, however there are exceptions.
+**Most likely the developers will know what to do**, so a 
+"Can you please create tags for you logs so that this and that mod is compatible? That would be greatly appreciated!" is probably sufficent.
 
-# How the issue should look like
-1. Name of the Mod
-2. Link to the mod
-3. Preferred Version
+Have a nice day cutting wood!
