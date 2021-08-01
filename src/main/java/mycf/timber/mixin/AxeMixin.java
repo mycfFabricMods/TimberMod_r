@@ -25,14 +25,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(AxeItem.class)
-public class axemixin extends MiningToolItem {
-    protected axemixin(float attackDamage, float attackSpeed, ToolMaterial material, Set<Block> effectiveBlocks, Settings settings) {
+public class AxeMixin extends MiningToolItem {
+    protected AxeMixin(float attackDamage, float attackSpeed, ToolMaterial material, Set<Block> effectiveBlocks, Settings settings) {
         super(attackDamage, attackSpeed, material, (Tag<Block>) effectiveBlocks, settings);
     }
     Integer mode = 1;
-
-    //private static final HashSet<Block> BYGLogs = new HashSet<Block>();
-    //Registry.BLOCK.getId(Blocks.WHITE_WOOL).equals(new Identifier("minecraft:white_wool"));
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(!world.isClient()){

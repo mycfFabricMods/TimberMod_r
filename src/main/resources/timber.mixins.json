@@ -4,7 +4,8 @@
   "package": "mycf.timber.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "axemixin"
+    "AxeMixin",
+    "ItemStackMixin"
   ],
   "client": [
   ],
