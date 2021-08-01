@@ -38,7 +38,7 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "use", at = @At(value = "HEAD"))
     public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (this.getItem() instanceof AxeItem && !((PlayerEntityTimber) user).getTimberMode()) {
+        if (this.getItem() instanceof AxeItem && !((PlayerEntityTimber) user).getTimberMode() && !world.isClient()) {
             if (!this.getOrCreateNbt().contains(Timber.TIMBER_KEY)) {
                 this.getOrCreateNbt().putBoolean(Timber.TIMBER_KEY, false);
             }
@@ -60,19 +60,20 @@ public abstract class ItemStackMixin {
     @Inject(method = "useOnBlock", at = @At(value = "HEAD"))
     public void useOnBlock(ItemUsageContext ctx, CallbackInfoReturnable<ActionResult> cir) {
 
-        if (ctx.getPlayer() != null) {
+        if (ctx.getPlayer() != null && !ctx.getWorld().isClient()) {
+            if (ctx.getWorld().getBlockState(ctx.getBlockPos()).getBlock().equals(Blocks.POLISHED_GRANITE)) {
 
-            if (this.getItem() instanceof AxeItem) {
-                if (!this.getOrCreateNbt().contains(Timber.TIMBER_KEY)) {
-                    this.getOrCreateNbt().putBoolean(Timber.TIMBER_KEY, false);
-                }
+
+                if (this.getItem() instanceof AxeItem) {
+                    if (!this.getOrCreateNbt().contains(Timber.TIMBER_TOGGLE_KEY)) {
+                        this.getOrCreateNbt().putBoolean(Timber.TIMBER_TOGGLE_KEY, false);
+                    }
 /*
             if (!this.getOrCreateNbt().contains(Timber.TIMBER_TOGGLE_KEY)) {
                 this.getOrCreateNbt().putBoolean(Timber.TIMBER_TOGGLE_KEY, false);
             }
  */
 
-                if (ctx.getWorld().getBlockState(ctx.getBlockPos()).getBlock().equals(Blocks.POLISHED_GRANITE)) {
                     // boolean bl = this.getNbt().getBoolean(Timber.TIMBER_TOGGLE_KEY);
                     // this.getOrCreateNbt().putBoolean(Timber.TIMBER_TOGGLE_KEY, !bl);
 
