@@ -2,7 +2,6 @@ package mycf.timber.mixin;
 
 import mycf.timber.PlayerEntityTimber;
 import mycf.timber.Timber;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityTimber {
-
-
     private boolean timberMode;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -25,12 +22,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEn
 
     @Inject(method = "writeCustomDataToNbt", at = @At(value = "TAIL"))
     public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putBoolean(Timber.TIMBER_TOGGLE_KEY, this.timberMode);
+        nbt.putBoolean(Timber.TIMBER_NEVER_AGAIN_BOOL, this.timberMode);
     }
 
-    @Inject(method = "readCustomDataFromNbt", at = @At(value="TAIL"))
-    public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci){
-        this.timberMode = nbt.getBoolean(Timber.TIMBER_TOGGLE_KEY);
+    @Inject(method = "readCustomDataFromNbt", at = @At(value = "TAIL"))
+    public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+        this.timberMode = nbt.getBoolean(Timber.TIMBER_NEVER_AGAIN_BOOL);
     }
 
     @Override

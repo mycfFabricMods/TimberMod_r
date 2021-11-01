@@ -10,9 +10,6 @@
   "icon": "assets/timber/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "mycf.timber.client.TimberClient"
-    ],
     "main": [
       "mycf.timber.Timber"
     ]
