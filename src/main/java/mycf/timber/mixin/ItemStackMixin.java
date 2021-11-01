@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -43,9 +44,11 @@ public abstract class ItemStackMixin {
             boolean shouldChopOne = this.getNbt().getBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL);
             this.getOrCreateNbt().putBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL, !shouldChopOne);
             if (shouldChopOne) {
-                user.sendMessage(new TranslatableText("item.timber.axe.chopone"), true);
+//                user.sendMessage(new TranslatableText("item.timber.axe.chopone"), true);
+                user.sendMessage(new LiteralText("Chop One!"), true);
             } else {
-                user.sendMessage(new TranslatableText("item.timber.axe.chopall"), true);
+//                user.sendMessage(new TranslatableText("item.timber.axe.chopall"), true);
+                user.sendMessage(new LiteralText("Chop them all!"), true);
             }
         }
     }
@@ -64,7 +67,8 @@ public abstract class ItemStackMixin {
                     boolean bl = ((PlayerEntityTimber) ctx.getPlayer()).getTimberMode();
                     ((PlayerEntityTimber) ctx.getPlayer()).setTimberMode(!bl);
                     this.getOrCreateNbt().putBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL, false);
-                    ctx.getPlayer().sendMessage(new TranslatableText("item.timber.axe.nevermode"), true);
+                    ctx.getPlayer().sendMessage(new LiteralText("Locked in 1 chop mode. To change right click the granite again!"), true);
+//                    ctx.getPlayer().sendMessage(new TranslatableText("item.timber.axe.nevermode"), true);
                 }
             }
         }
