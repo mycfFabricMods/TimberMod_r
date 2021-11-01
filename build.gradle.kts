@@ -31,11 +31,6 @@ dependencies {
     mappings("net.fabricmc:yarn:$yarn_mappings:v2")
     modImplementation("net.fabricmc:fabric-loader:$loader_version")
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
-
-    // Kotlin Fabric Language Module (probably not needed)
-    //modImplementation("net.fabricmc:fabric-language-kotlin:${project.fabricKotlinVersion}")
 }
 
 tasks {
