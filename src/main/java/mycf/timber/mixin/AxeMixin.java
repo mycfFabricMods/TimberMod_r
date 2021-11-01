@@ -11,12 +11,11 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -27,6 +26,7 @@ public class AxeMixin extends MiningToolItem {
     protected AxeMixin(float attackDamage, float attackSpeed, ToolMaterial material, Set<Block> effectiveBlocks, Settings settings) {
         super(attackDamage, attackSpeed, material, (Tag<Block>) effectiveBlocks, settings);
     }
+    private int MAX_BREAK_BLOCKS = 30;
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
@@ -37,27 +37,29 @@ public class AxeMixin extends MiningToolItem {
         boolean mode = stack.getOrCreateNbt().getBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL);
         if (!world.isClient() && mode && state.isIn(BlockTags.LOGS)) {
             int damage = 1;
-            int trueDamage = Math.abs(stack.getMaxDamage() - stack.getDamage());
+            final int trueDamage = Math.abs(stack.getMaxDamage() - stack.getDamage());
 
-            for (BlockPos blockPos : BlockPos.iterate(pos.add(0, 1, 0), pos.add(0, 255, 0))) {
-                if (world.getBlockState(blockPos).isIn(BlockTags.LOGS) && damage < trueDamage) {
-                    world.breakBlock(blockPos, true);
-                    damage++;
-                } else if (world.getBlockState(blockPos).isIn(BlockTags.LEAVES)) {
-                    deleteLeaves(world, blockPos);
-                    break;
-                } else {
-                    break;
-                }
+            BlockPos.Mutable mutableUp = pos.mutableCopy();
+            BlockPos.Mutable mutableDown = pos.mutableCopy();
+
+            while (world.getBlockState(mutableUp.move(Direction.UP)).isIn(BlockTags.LOGS) && damage < trueDamage) {
+                world.breakBlock(mutableUp, true);
+                damage++;
             }
-
-            for (int i = 1; i < pos.getY() && world.getBlockState(pos.down(i)).isIn(BlockTags.LOGS) && damage < trueDamage; i++) {
-                world.breakBlock(pos.down(i), true);
+            while (world.getBlockState(mutableDown.move(Direction.DOWN)).isIn(BlockTags.LOGS) && damage < trueDamage) {
+                world.breakBlock(mutableDown, true);
                 damage++;
             }
 
-            // state.getHardness(world, pos) != 0.0F shouldn't ever be called, but I'll leave it just in case
+            // wont work
+            System.out.println(world.getBlockState(mutableUp));
+            if (world.getBlockState(mutableUp.offset(Direction.DOWN)).isIn(BlockTags.LEAVES)){
+                damage = deleteLeaves(world, mutableUp, damage, trueDamage);
+            }
+
+            // state.getHardness(world, pos) != 0.0F shouldn't ever be false, but I'll leave it just in case
             if (!world.isClient() && state.getHardness(world, pos) != 0.0F) {
+                this.MAX_BREAK_BLOCKS = 30;
                 stack.damage(damage, miner, (PlayerEntity) -> PlayerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
 
             }
@@ -69,16 +71,23 @@ public class AxeMixin extends MiningToolItem {
         return true;
     }
 
-    // This is a bit toooo much atm
-    // Store Leave type and cross validate with Log Type... this is only possible for vanilla leaves though
-    private void deleteLeaves(World world, BlockPos pos) {
-        for (var direction : Direction.values()){
+    // broke this call
+    private int deleteLeaves(World world, BlockPos pos, int damage, int trueDamage) {
+        for (var direction : Direction.values()) {
             var blockState = world.getBlockState(pos.offset(direction));
-            if (blockState.isIn(BlockTags.LEAVES) || blockState.isIn(BlockTags.LOGS)) {
-//                ((LeavesBlock)world.getBlockState(pos.offset(direction)).getBlock()).scheduledTick();
-                world.breakBlock(pos.offset(direction), true);
-                deleteLeaves(world, pos.offset(direction));
+            if (blockState.isIn(BlockTags.LEAVES) && this.MAX_BREAK_BLOCKS > 0) {
+                ((LeavesBlock)blockState.getBlock()).randomTick(blockState, (ServerWorld) world, pos, world.getRandom());
+                // dont like this solution
+                this.MAX_BREAK_BLOCKS--;
+                damage = deleteLeaves(world, pos.offset(direction), damage, trueDamage);
+            } else if (blockState.isIn(BlockTags.LOGS) && damage < trueDamage && this.MAX_BREAK_BLOCKS > 0) {
+                damage++;
+                world.breakBlock(pos, true);
+                // dont like this solution
+                this.MAX_BREAK_BLOCKS--;
+                damage = deleteLeaves(world, pos.offset(direction), damage, trueDamage);
             }
         }
+        return damage;
     }
 }
