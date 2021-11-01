@@ -1,5 +1,5 @@
 {
-  "item.timber.axe.nevermode": "Der Modus ist nun chop 1, solange bis Du wieder auf den Stein klickst!",
+  "item.timber.axe.nevermode": "Der Modus ist nun im 'Einblockmodus!', solange bis Du wieder auf den Granit klickst!",
   "item.timber.axe.chopone": "Einblockmodus!",
-  "item.timber.axe.chopall": "Mehrblockmodus!",
+  "item.timber.axe.chopall": "Mehrblockmodus!"
 }
