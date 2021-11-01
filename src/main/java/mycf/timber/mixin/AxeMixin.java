@@ -26,14 +26,10 @@ public class AxeMixin extends MiningToolItem {
     protected AxeMixin(float attackDamage, float attackSpeed, ToolMaterial material, Set<Block> effectiveBlocks, Settings settings) {
         super(attackDamage, attackSpeed, material, (Tag<Block>) effectiveBlocks, settings);
     }
-    private int MAX_BREAK_BLOCKS = 30;
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
 
-        // I think I should do this recursively too... that way I really get every block from one tree
-        // make sure I store the Log Type to cross validate if it's the same tree
-        // Maybe I should go up and down and only 1 or 2 left/right to avoid abusing this feature
         boolean mode = stack.getOrCreateNbt().getBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL);
         if (!world.isClient() && mode && state.isIn(BlockTags.LOGS)) {
             int damage = 1;
@@ -51,15 +47,19 @@ public class AxeMixin extends MiningToolItem {
                 damage++;
             }
 
-            // wont work
-            System.out.println(world.getBlockState(mutableUp));
-            if (world.getBlockState(mutableUp.offset(Direction.DOWN)).isIn(BlockTags.LEAVES)){
-                damage = deleteLeaves(world, mutableUp, damage, trueDamage);
+            if (world.getBlockState(mutableUp.offset(Direction.UP)).isIn(BlockTags.LEAVES)) {
+                for (BlockPos blockPos : BlockPos.iterateOutwards(mutableUp.offset(Direction.UP), 2, 2, 2)) {
+                    var blockState = world.getBlockState(blockPos);
+                    if (blockState.isIn(BlockTags.LEAVES)) {
+                        ((LeavesBlock) blockState.getBlock()).scheduledTick(blockState, (ServerWorld) world, blockPos, world.getRandom());
+                    } else if (blockState.isIn(BlockTags.LOGS) && damage < trueDamage) {
+                        world.breakBlock(blockPos, true);
+                        damage++;
+                    }
+                }
             }
 
-            // state.getHardness(world, pos) != 0.0F shouldn't ever be false, but I'll leave it just in case
             if (!world.isClient() && state.getHardness(world, pos) != 0.0F) {
-                this.MAX_BREAK_BLOCKS = 30;
                 stack.damage(damage, miner, (PlayerEntity) -> PlayerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
 
             }
@@ -69,25 +69,5 @@ public class AxeMixin extends MiningToolItem {
         }
 
         return true;
-    }
-
-    // broke this call
-    private int deleteLeaves(World world, BlockPos pos, int damage, int trueDamage) {
-        for (var direction : Direction.values()) {
-            var blockState = world.getBlockState(pos.offset(direction));
-            if (blockState.isIn(BlockTags.LEAVES) && this.MAX_BREAK_BLOCKS > 0) {
-                ((LeavesBlock)blockState.getBlock()).randomTick(blockState, (ServerWorld) world, pos, world.getRandom());
-                // dont like this solution
-                this.MAX_BREAK_BLOCKS--;
-                damage = deleteLeaves(world, pos.offset(direction), damage, trueDamage);
-            } else if (blockState.isIn(BlockTags.LOGS) && damage < trueDamage && this.MAX_BREAK_BLOCKS > 0) {
-                damage++;
-                world.breakBlock(pos, true);
-                // dont like this solution
-                this.MAX_BREAK_BLOCKS--;
-                damage = deleteLeaves(world, pos.offset(direction), damage, trueDamage);
-            }
-        }
-        return damage;
     }
 }
