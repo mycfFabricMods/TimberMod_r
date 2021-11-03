@@ -17,7 +17,6 @@ val maven_group: String by project
 val minecraft_version: String by project
 val yarn_mappings: String by project
 val loader_version: String by project
-val fabric_version: String by project
 
 version = mod_version
 group = maven_group
