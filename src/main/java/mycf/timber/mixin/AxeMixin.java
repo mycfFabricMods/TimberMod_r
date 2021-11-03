@@ -48,13 +48,18 @@ public class AxeMixin extends MiningToolItem {
             }
 
             if (world.getBlockState(mutableUp.offset(Direction.UP)).isIn(BlockTags.LEAVES)) {
-                for (BlockPos blockPos : BlockPos.iterateOutwards(mutableUp.offset(Direction.UP), 2, 2, 2)) {
+                for (BlockPos blockPos : BlockPos.iterateOutwards(mutableUp.offset(Direction.UP), 8, 8, 8)) {
                     var blockState = world.getBlockState(blockPos);
                     if (blockState.isIn(BlockTags.LEAVES)) {
                         ((LeavesBlock) blockState.getBlock()).scheduledTick(blockState, (ServerWorld) world, blockPos, world.getRandom());
                     } else if (blockState.isIn(BlockTags.LOGS) && damage < trueDamage) {
-                        world.breakBlock(blockPos, true);
-                        damage++;
+                        var maxX = Math.abs(mutableUp.offset(Direction.UP).getX() - blockPos.getX());
+                        var maxY = Math.abs(mutableUp.offset(Direction.UP).getY() - blockPos.getY());
+                        var maxZ = Math.abs(mutableUp.offset(Direction.UP).getZ() - blockPos.getZ());
+                        if (maxX < 3 && maxY < 3 && maxZ < 3) {
+                            world.breakBlock(blockPos, true);
+                            damage++;
+                        }
                     }
                 }
             }

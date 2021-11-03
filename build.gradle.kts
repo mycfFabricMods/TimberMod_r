@@ -51,7 +51,7 @@ tasks {
         filesMatching("fabric.mod.json") { expand("version" to project.version) }
     }
     java {
-        toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion.toString())) }
+        toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion)) }
         sourceCompatibility = JavaVersion.VERSION_16
         targetCompatibility = JavaVersion.VERSION_16
         withSourcesJar()
