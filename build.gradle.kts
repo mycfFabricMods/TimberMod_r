@@ -9,7 +9,7 @@ base {
     archivesName.set(archives_base_name)
 }
 
-val javaVersion = JavaVersion.VERSION_16.toString()
+val javaVersion = JavaVersion.VERSION_17.toString()
 
 val mod_version: String by project
 val maven_group: String by project
@@ -51,8 +51,8 @@ tasks {
     }
     java {
         toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion)) }
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         withSourcesJar()
     }
 }

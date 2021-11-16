@@ -44,11 +44,11 @@ public abstract class ItemStackMixin {
             boolean shouldChopOne = this.getNbt().getBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL);
             this.getOrCreateNbt().putBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL, !shouldChopOne);
             if (shouldChopOne) {
-                user.sendMessage(new TranslatableText("item.timber.axe.chopone"), true);
-//                user.sendMessage(new LiteralText("Chop One!"), true);
+//                user.sendMessage(new TranslatableText("item.timber.axe.chopone"), true);
+                user.sendMessage(new LiteralText("Chop One!"), true);
             } else {
-                user.sendMessage(new TranslatableText("item.timber.axe.chopall"), true);
-//                user.sendMessage(new LiteralText("Chop them all!"), true);
+//                user.sendMessage(new TranslatableText("item.timber.axe.chopall"), true);
+                user.sendMessage(new LiteralText("Chop them all!"), true);
             }
         }
     }
