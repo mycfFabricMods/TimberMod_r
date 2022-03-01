@@ -13,18 +13,17 @@ import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
-import java.util.Set;
 
 @Mixin(AxeItem.class)
-public class AxeMixin extends MiningToolItem {
-    protected AxeMixin(float attackDamage, float attackSpeed, ToolMaterial material, Set<Block> effectiveBlocks, Settings settings) {
-        super(attackDamage, attackSpeed, material, (Tag<Block>) effectiveBlocks, settings);
+abstract public class AxeMixin extends MiningToolItem {
+    protected AxeMixin(float attackDamage, float attackSpeed, ToolMaterial material, TagKey<Block> effectiveBlocks, Settings settings) {
+        super(attackDamage, attackSpeed, material, effectiveBlocks, settings);
     }
 
     @Override
