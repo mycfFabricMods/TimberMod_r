@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "0.10-SNAPSHOT"
+    id("fabric-loom") version "0.12-SNAPSHOT"
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm") version kotlinVersion
 }
@@ -21,7 +21,6 @@ val loader_version: String by project
 version = mod_version
 group = maven_group
 
-minecraft {}
 repositories {}
 
 dependencies {

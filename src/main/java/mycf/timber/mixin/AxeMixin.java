@@ -1,6 +1,7 @@
 package mycf.timber.mixin;
 
 
+import mycf.timber.PlayerEntityTimber;
 import mycf.timber.Timber;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,7 +31,9 @@ abstract public class AxeMixin extends MiningToolItem {
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
 
         boolean mode = stack.getOrCreateNbt().getBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL);
-        if (!world.isClient() && mode && state.isIn(BlockTags.LOGS)) {
+        // checks if the player wants to use the timber mode, if not it will not run, nonetheless of the axe's mode
+        boolean neverOrEver = ((PlayerEntityTimber) miner).getTimberMode();
+        if (!world.isClient() && mode && state.isIn(BlockTags.LOGS) && !neverOrEver) {
             int damage = 1;
             final int trueDamage = Math.abs(stack.getMaxDamage() - stack.getDamage());
 
