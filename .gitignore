@@ -120,4 +120,5 @@ run/
 #  other
 *.diff
 *.patch
-*.sh
+*.shbin/
+/bin/
