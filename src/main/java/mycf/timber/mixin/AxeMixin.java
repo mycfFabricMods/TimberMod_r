@@ -1,8 +1,8 @@
 package mycf.timber.mixin;
 
 
-import mycf.timber.PlayerEntityTimber;
-import mycf.timber.Timber;
+import mycf.timber.TimberModes;
+import mycf.timber.Toggleable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -30,10 +30,10 @@ abstract public class AxeMixin extends MiningToolItem {
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
 
-        boolean mode = stack.getOrCreateNbt().getBoolean(Timber.TIMBER_ONE_OR_MORE_BOOL);
+        boolean mode = ((Toggleable)(Object) stack).getToggleMode$mycftimber();
         // checks if the player wants to use the timber mode, if not it will not run, nonetheless of the axe's mode
-        boolean neverOrEver = ((PlayerEntityTimber) miner).getTimberMode();
-        if (!world.isClient() && mode && state.isIn(BlockTags.LOGS) && !neverOrEver) {
+        boolean canSwap = ((Toggleable) miner).getToggleMode$mycftimber();
+        if (!world.isClient() && mode && state.isIn(BlockTags.LOGS) && canSwap) {
             int damage = 1;
             final int trueDamage = Math.abs(stack.getMaxDamage() - stack.getDamage());
 

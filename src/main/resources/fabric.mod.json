@@ -7,11 +7,13 @@
   "authors": ["0xmycf"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/timber/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
       "mycf.timber.Timber"
+    ],
+    "client": [
+      "mycf.timber.ClientEntryPoint"
     ]
   },
   "mixins": [
